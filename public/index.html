@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Duit</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #0b0f19; color: #f3f4f6; font-family: sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .card-dark { background-color: #161c2a; border: 1px solid #1e293b; }
+    </style>
+</head>
+<body class="max-w-md mx-auto min-h-screen flex flex-col justify-between relative pb-20 shadow-2xl">
+
+    <div class="p-4 flex justify-between items-center bg-[#0b0f19] sticky top-0 z-50">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 bg-yellow-500 rounded-full border border-gray-600 flex items-center justify-center text-white font-bold">K</div>
+            <div>
+                <div class="text-xs text-gray-400" id="txt-tele">@kntnggstc</div>
+                <div class="text-sm font-semibold" id="txt-user">kntgloCo</div>
+            </div>
+        </div>
+        <div class="flex space-x-3 text-gray-400">
+            <button class="w-8 h-8 rounded-full card-dark flex items-center justify-center"><i class="fa-solid fa-gear text-sm"></i></button>
+            <button class="w-8 h-8 rounded-full card-dark flex items-center justify-center relative"><i class="fa-solid fa-bell text-sm"></i><span class="absolute -top-1 -right-1 bg-yellow-500 text-black text-[9px] px-1 rounded-full font-bold">0</span></button>
+        </div>
+    </div>
+
+    <div class="px-4 mb-4">
+        <div class="bg-gradient-to-r from-blue-700 to-indigo-900 rounded-xl p-4 text-center relative overflow-hidden shadow-lg border border-blue-500/30">
+            <h3 class="text-xl font-black italic tracking-wide text-white">Kuis <span class="text-yellow-400">Duit</span></h3>
+            <p class="text-xs text-blue-200 mt-1">JAWAB SOAL, DAPAT REWARD!</p>
+            <p class="text-[10px] text-gray-300 mt-2">Kerjakan tugas harian, kumpulkan reward, dan raih penghasilan setiap hari.</p>
+        </div>
+    </div>
+
+    <main class="flex-1 px-4 overflow-y-auto">
+        <div id="home" class="tab-content active space-y-4">
+            <div class="bg-gradient-to-br from-blue-600 to-indigo-700 p-5 rounded-2xl flex justify-between items-center relative shadow-lg">
+                <div>
+                    <span class="text-xs text-blue-200 flex items-center"><i class="fa-solid fa-wallet mr-1"></i> Total Saldo</span>
+                    <h1 class="text-3xl font-bold mt-1" id="main-saldo">Rp 11.857</h1>
+                    <span class="inline-block bg-blue-500/30 text-emerald-300 text-[11px] px-2 py-0.5 rounded-full mt-2 font-medium">+ Rp61.243 Hari ini</span>
+                </div>
+                <i class="fa-solid fa-money-bill-trend-up text-5xl text-yellow-400/80"></i>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <div class="card-dark p-4 rounded-xl flex flex-col justify-between">
+                    <div>
+                        <span class="text-xs text-gray-400"><i class="fa-solid fa-briefcase text-amber-600 mr-1"></i> Saldo Penarikan</span>
+                        <div class="text-base font-bold mt-1" id="sub-tarik">Rp 11.600</div>
+                    </div>
+                    <button onclick="switchTab('wallet')" class="w-full bg-gray-800 text-xs py-1.5 rounded-lg mt-3 hover:bg-gray-700">Tarik Sekarang</button>
+                </div>
+                <div class="card-dark p-4 rounded-xl flex flex-col justify-between">
+                    <div>
+                        <span class="text-xs text-gray-400"><i class="fa-solid fa-credit-card text-yellow-500 mr-1"></i> Saldo Akun</span>
+                        <div class="text-base font-bold mt-1" id="sub-akun">Rp 257</div>
+                    </div>
+                    <button onclick="switchTab('wallet')" class="w-full bg-gray-800 text-xs py-1.5 rounded-lg mt-3 hover:bg-gray-700">Lihat Detail</button>
+                </div>
+                <div class="card-dark p-4 rounded-xl flex flex-col justify-between">
+                    <div>
+                        <span class="text-xs text-gray-400"><i class="fa-solid fa-crown text-yellow-400 mr-1"></i> Plan Aktif</span>
+                        <div class="text-base font-bold mt-1 text-yellow-400" id="sub-plan">Bronze</div>
+                    </div>
+                    <button onclick="switchTab('plan')" class="w-full bg-gray-800 text-xs py-1.5 rounded-lg mt-3 hover:bg-gray-700">Upgrade</button>
+                </div>
+                <div class="card-dark p-4 rounded-xl flex flex-col justify-between">
+                    <div>
+                        <span class="text-xs text-gray-400"><i class="fa-solid fa-bullseye text-red-500 mr-1"></i> Limit Hari Ini</span>
+                        <div class="text-base font-bold mt-1" id="sub-limit">30/30</div>
+                    </div>
+                    <div class="text-[10px] text-gray-500 mt-3 text-center">Sisa <span id="sub-sisa">30</span> Tugas</div>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-r from-purple-900/40 to-indigo-900/40 border border-purple-500/20 p-4 rounded-xl flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <i class="fa-solid fa-box-open text-2xl text-purple-400"></i>
+                    <div>
+                        <h4 class="text-sm font-semibold">Bonus Harian</h4>
+                        <p class="text-[11px] text-gray-400">Login setiap hari dan dapatkan bonus!</p>
+                    </div>
+                </div>
+                <button onclick="alert('Berhasil Check-in harian!')" class="bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-1.5 rounded-xl text-xs font-semibold text-white">Check-in</button>
+            </div>
+        </div>
+
+        <div id="tugas" class="tab-content space-y-4">
+            <div class="card-dark p-4 rounded-xl">
+                <div class="flex items-center justify-between border-b border-gray-800 pb-3 mb-3">
+                    <h3 class="text-sm font-bold text-cyan-400"><i class="fa-solid fa-gamepad mr-1"></i> Arena Kuis Harian</h3>
+                    <span class="text-xs px-2 py-0.5 bg-cyan-500/10 text-cyan-300 rounded-full" id="quiz-count">Soal Terbuka</span>
+                </div>
+                <div id="quiz-wrapper" class="space-y-4">
+                    <p class="text-center text-gray-400 text-xs py-4">Tekan tombol di bawah untuk mulai memuat soal...</p>
+                </div>
+                <button id="btn-start-quiz" onclick="loadKuisStep()" class="w-full bg-cyan-400 text-black font-bold py-3 rounded-xl mt-4 text-center tracking-wide text-sm shadow-lg shadow-cyan-400/20">Mulai Kerjakan</button>
+            </div>
+        </div>
+
+        <div id="wallet" class="tab-content space-y-4">
+            <div class="grid grid-cols-3 gap-1 card-dark p-1 rounded-xl">
+                <button onclick="switchWalletSub('wd')" id="btn-sub-wd" class="py-2 text-xs font-bold rounded-lg text-center bg-cyan-400 text-black">Withdraw</button>
+                <button onclick="switchWalletSub('depo')" id="btn-sub-depo" class="py-2 text-xs font-bold rounded-lg text-center text-gray-400">Deposit</button>
+                <button onclick="switchWalletSub('riwayat')" id="btn-sub-riwayat" class="py-2 text-xs font-bold rounded-lg text-center text-gray-400">Riwayat</button>
+            </div>
+            
+            <div id="wallet-wd" class="space-y-3">
+                <div class="flex flex-col"><label class="text-xs text-gray-400 mb-1">Metode</label>
+                    <select id="wd-metode" class="card-dark p-3 rounded-xl text-sm focus:outline-none"><option>DANA</option><option>OVO</option><option>GOPAY</option></select>
+                </div>
+                <div class="flex flex-col"><label class="text-xs text-gray-400 mb-1">Nominal</label>
+                    <input type="number" id="wd-nominal" placeholder="Contoh: 20000" class="card-dark p-3 rounded-xl text-sm focus:outline-none">
+                </div>
+                <div class="flex flex-col"><label class="text-xs text-gray-400 mb-1">Nama Akun</label>
+                    <input type="text" id="wd-nama" placeholder="Nama Penerima" class="card-dark p-3 rounded-xl text-sm focus:outline-none">
+                </div>
+                <div class="flex flex-col"><label class="text-xs text-gray-400 mb-1">Nomor Akun</label>
+                    <input type="text" id="wd-nomor" placeholder="08xxxxxxxxxx" class="card-dark p-3 rounded-xl text-sm focus:outline-none">
+                </div>
+                <button onclick="submitTransaksi('Withdraw')" class="w-full bg-cyan-400 text-black text-sm font-bold py-3 rounded-xl shadow-md">Ajukan Withdraw</button>
+            </div>
+
+            <div id="wallet-depo" class="space-y-3 hidden">
+                <div class="flex flex-col"><label class="text-xs text-gray-400 mb-1">Pilih Nominal Upgrade Plan</label>
+                    <select id="depo-nominal" class="card-dark p-3 rounded-xl text-sm"><option value="50000">Rp 50.000 (Bronze)</option><option value="100000">Rp 100.000 (Silver)</option><option value="150000">Rp 150.000 (Gold)</option></select>
+                </div>
+                <div class="flex flex-col"><label class="text-xs text-gray-400 mb-1">Metode Transfer Pembayaran</label>
+                    <select id="depo-metode" class="card-dark p-3 rounded-xl text-sm"><option>QRIS Otomatis</option><option>Transfer DANA</option></select>
+                </div>
+                <button onclick="submitTransaksi('Deposit')" class="w-full bg-emerald-500 text-white text-sm font-bold py-3 rounded-xl shadow-md">Konfirmasi Deposit / Upgrade</button>
+            </div>
+
+            <div id="wallet-riwayat" class="space-y-2 hidden">
+                <h4 class="text-xs font-bold text-gray-400 mb-2">Daftar Transaksi Terakhir</h4>
+                <div id="tx-list" class="space-y-2"></div>
+            </div>
+        </div>
+
+        <div id="plan" class="tab-content space-y-4">
+            <div class="text-center py-2">
+                <h3 class="text-base font-bold">Pilih Plan Terbaik Anda</h3>
+                <p class="text-xs text-gray-400">Semakin tinggi plan, semakin besar reward tugas.</p>
+            </div>
+            
+            <div class="card-dark p-4 rounded-xl border-l-4 border-gray-500 flex justify-between items-center">
+                <div>
+                    <h4 class="font-bold text-sm">Plan Free (Gratis)</h4>
+                    <p class="text-xs text-gray-400 mt-1">Reward/Soal: Rp 100 | Limit: 15 Soal</p>
+                </div>
+                <span class="text-xs bg-gray-700 px-3 py-1 rounded-full">Aktif</span>
+            </div>
+            
+            <div class="card-dark p-4 rounded-xl border-l-4 border-amber-500 flex justify-between items-center">
+                <div>
+                    <h4 class="font-bold text-sm text-amber-400">Plan Bronze</h4>
+                    <p class="text-xs text-gray-400 mt-1">Reward/Soal: Rp 650 | Limit: 30 Soal</p>
+                </div>
+                <button onclick="switchTab('wallet'); switchWalletSub('depo');" class="bg-amber-500 text-black font-bold text-xs px-3 py-1.5 rounded-lg">Rp 50.000</button>
+            </div>
+        </div>
+
+        <div id="referral" class="tab-content space-y-4">
+            <div class="card-dark p-5 rounded-xl text-center space-y-3">
+                <i class="fa-solid fa-users text-4xl text-blue-400"></i>
+                <h3 class="font-bold text-lg">Program Referral</h3>
+                <p class="text-xs text-gray-400">Bagikan link referral kamu dan dapatkan bonus saldo dari setiap teman yang upgrade plan.</p>
+                <div class="bg-gray-950 p-3 rounded-xl border border-gray-800 flex justify-between items-center">
+                    <span class="text-xs font-mono select-all text-gray-300" id="ref-code">121716A6A1</span>
+                    <button onclick="navigator.clipboard.writeText(document.getElementById('ref-code').innerText); alert('Kode disalin!');" class="text-xs text-cyan-400 font-bold">Salin</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="bantuan" class="tab-content space-y-3">
+            <h3 class="text-sm font-bold"><i class="fa-solid fa-circle-question mr-1"></i> Pertanyaan Populer</h3>
+            <div class="card-dark p-3 rounded-lg text-xs space-y-2">
+                <p class="font-semibold text-gray-200">Q: Kapan reward tugas masuk?</p>
+                <p class="text-gray-400">A: Saldo penarikan langsung bertambah secara instan setelah menjawab kuis dengan benar.</p>
+            </div>
+            <div class="card-dark p-3 rounded-lg text-xs space-y-2">
+                <p class="font-semibold text-gray-200">Q: Kenapa penarikan saya pending?</p>
+                <p class="text-gray-400">A: Semua penarikan antre untuk divalidasi manual oleh Admin via Panel Admin.</p>
+            </div>
+        </div>
+
+    </main>
+
+    <nav class="absolute bottom-0 left-0 right-0 h-16 bg-[#0d1322] border-t border-gray-800 flex items-center justify-around px-2 z-50">
+        <button onclick="switchTab('home')" class="nav-btn text-cyan-400 flex flex-col items-center justify-center w-12"><i class="fa-solid fa-house text-sm"></i><span class="text-[10px] mt-0.5">Home</span></button>
+        <button onclick="switchTab('tugas')" class="nav-btn text-gray-500 flex flex-col items-center justify-center w-12"><i class="fa-solid fa-list-check text-sm"></i><span class="text-[10px] mt-0.5">Tugas</span></button>
+        <button onclick="switchTab('wallet')" class="nav-btn text-gray-500 flex flex-col items-center justify-center w-12"><i class="fa-solid fa-wallet text-sm"></i><span class="text-[10px] mt-0.5">Wallet</span></button>
+        <button onclick="switchTab('plan')" class="nav-btn text-gray-500 flex flex-col items-center justify-center w-12"><i class="fa-solid fa-crown text-sm"></i><span class="text-[10px] mt-0.5">Plan</span></button>
+        <button onclick="switchTab('referral')" class="nav-btn text-gray-500 flex flex-col items-center justify-center w-12"><i class="fa-solid fa-share-nodes text-sm"></i><span class="text-[10px] mt-0.5">Referral</span></button>
+        <button onclick="switchTab('bantuan')" class="nav-btn text-gray-500 flex flex-col items-center justify-center w-12"><i class="fa-solid fa-headset text-sm"></i><span class="text-[10px] mt-0.5">Bantuan</span></button>
+    </nav>
+
+    <script src="app.js"></script>
+</body>
+</html>
