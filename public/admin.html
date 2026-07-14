@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel Kontrol Admin - Kuis Duit</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-white p-6">
+    <div class="max-w-4xl mx-auto space-y-6">
+        <div class="flex justify-between items-center border-b border-slate-700 pb-4">
+            <h1 class="text-2xl font-black text-cyan-400">📊 Admin Dashboard Kuis Duit</h1>
+            <a href="/" class="text-xs bg-slate-700 px-3 py-1.5 rounded-lg">Kembali ke App</a>
+        </div>
+
+        <div class="bg-slate-800 p-4 rounded-xl shadow">
+            <h2 class="text-sm font-bold text-gray-300 mb-3">Persetujuan Transaksi (Deposit / Withdraw)</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs text-gray-300">
+                    <thead class="bg-slate-700 text-gray-200 uppercase text-[10px]">
+                        <tr>
+                            <th class="p-3">ID Tx</th>
+                            <th class="p-3">Tipe</th>
+                            <th class="p-3">Nominal</th>
+                            <th class="p-3">Detail Akun</th>
+                            <th class="p-3">Status</th>
+                            <th class="p-3 text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-tx-table">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", loadAdminData);
+
+        function loadAdminData() {
+            fetch('/api/transactions').then(res => res.json()).then(txs => {
+                const tbody = document.getElementById('admin-tx-table');
+                tbody.innerHTML = '';
+                txs.forEach(t => {
+                    const actionButtons = t.status === 'Pending' ? `
+                        <button onclick="processTx('${t.id}', 'Success')" class="bg-emerald-600 px-2 py-1 rounded text-white font-bold mr-1">Approve</button>
+                        <button onclick="processTx('${t.id}', 'Rejected')" class="bg-red-600 px-2 py-1 rounded text-white font-bold">Reject</button>
+                    ` : `<span class="text-gray-500">Selesai</span>`;
+
+                    tbody.innerHTML += `
+                        <tr class="border-b border-slate-700 hover:bg-slate-700/50">
+                            <td class="p-3 font-mono">${t.id}</td>
+                            <td class="p-3 font-bold text-cyan-300">${t.tipe}</td>
+                            <td class="p-3">Rp ${t.nominal.toLocaleString()}</td>
+                            <td class="p-3 text-gray-400">${t.metode || ''} - ${t.nomorAkun || 'Sistem'} (${t.namaAkun || '-'})</td>
+                            <td class="p-3 font-semibold">${t.status}</td>
+                            <td class="p-3 text-center">${actionButtons}</td>
+                        </tr>
+                    `;
+                });
+            });
+        }
+
+        function processTx(txId, action) {
+            fetch('/api/admin/action', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ txId, action })
+            })
+            .then(res => res.json())
+            .then(() => {
+                alert(`Transaksi ${txId} berhasil di-${action}`);
+                loadAdminData();
+            });
+        }
+    </script>
+</body>
+</html>
+
